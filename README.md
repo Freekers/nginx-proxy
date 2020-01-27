@@ -1,3 +1,7 @@
+![latest 0.7.0](https://img.shields.io/badge/latest-0.7.0-green.svg?style=flat)
+![nginx 1.17.5](https://img.shields.io/badge/nginx-1.17.5-brightgreen.svg) ![License MIT](https://img.shields.io/badge/license-MIT-blue.svg) [![Build Status](https://travis-ci.org/jwilder/nginx-proxy.svg?branch=master)](https://travis-ci.org/jwilder/nginx-proxy) [![](https://img.shields.io/docker/stars/jwilder/nginx-proxy.svg)](https://hub.docker.com/r/jwilder/nginx-proxy 'DockerHub') [![](https://img.shields.io/docker/pulls/jwilder/nginx-proxy.svg)](https://hub.docker.com/r/jwilder/nginx-proxy 'DockerHub')
+
+
 nginx-proxy sets up a container running nginx and [docker-gen][1].  docker-gen generates reverse proxy configs for nginx and reloads nginx when containers are started and stopped.
 
 See [Automated Nginx Reverse Proxy for Docker][2] for why you might want to use this.
@@ -12,7 +16,7 @@ Then start any containers you want proxied with an env var `VIRTUAL_HOST=subdoma
 
     $ docker run -e VIRTUAL_HOST=foo.bar.com  ...
 
-The containers being proxied must [expose](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) the port to be proxied, either by using the `EXPOSE` directive in their `Dockerfile` or by using the `--expose` flag to `docker run` or `docker create`.
+The containers being proxied must [expose](https://docs.docker.com/engine/reference/run/#expose-incoming-ports) the port to be proxied, either by using the `EXPOSE` directive in their `Dockerfile` or by using the `--expose` flag to `docker run` or `docker create` and be in the same network. By default, if you don't pass the --net flag when your nginx-proxy container is created, it will only be attached to the default bridge network. This means that it will not be able to connect to containers on networks other than bridge.
 
 Provided your DNS is setup to forward foo.bar.com to the host running nginx-proxy, the request will be routed to a container with the VIRTUAL_HOST env var set.
 
@@ -181,7 +185,7 @@ Finally, start your containers with `VIRTUAL_HOST` environment variables.
     $ docker run -e VIRTUAL_HOST=foo.bar.com  ...
 ### SSL Support using letsencrypt
 
-[letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion) is a lightweight companion container for the nginx-proxy. It allow the creation/renewal of Let's Encrypt certificates automatically.
+[letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion) is a lightweight companion container for the nginx-proxy. It allows the creation/renewal of Let's Encrypt certificates automatically.
 
 Set `DHPARAM_GENERATION` environment variable to `false` to disabled Diffie-Hellman parameters completely. This will also ignore auto-generation made by `nginx-proxy`.
 The default value is `true`
